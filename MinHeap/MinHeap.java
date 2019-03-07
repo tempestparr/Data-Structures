@@ -6,16 +6,24 @@ public class MinHeap {
 
     public MinHeap(int capacity) {
         heap = new int[capacity];
+        // heap[0] stores the current size
         heap[0] = 0;
     }
 
+    // insert a value at the end and swap it with its parent if needed
     public void insert(int n) {
+        // add the value at the end
         heap[heap[0] + 1] = n;
+        
+        // increment the current size
         heap[0]++;
 
         int currIndex = heap[0];
         int parentIndex = parentOf(currIndex);
 
+        // while the inserted value is less than the value of its parent
+        // and the inserted value isn't already the root, swap it
+        // with its parent
         while (currIndex != 1 && (heap[currIndex] < heap[parentIndex])) {
             int temp = heap[currIndex];
             heap[currIndex] = heap[parentIndex];
@@ -25,6 +33,7 @@ public class MinHeap {
         }
     }
 
+    // return the min node value at the root
     public int getMin() {
         int min = heap[1];
 
@@ -56,38 +65,34 @@ public class MinHeap {
         return min;
     }
 
-
+    // swap values to be in min-heap order
     public static void heapify(int[] data) {
         // last index in the array
         int end = data[0];
+        // start at the last parent node
         int start = parentOf(end);
 
         while (start >= 1) {
-            // sift down the node at index start to the proper place
-            // such that all nodes below the start index are in heap
-            // order
             siftDown(data, start, end);
             // decrement to the next lowest parent node
             start--;
         }
-        // after sifting down the root all nodes/elements
-        //  are in heap order
     }
 
+    // sift down the node to its correct spot if the children are smaller
     public static void siftDown(int[] data, int start, int end) {
         int root = start;
-        // while the root has at least one child
+        // while the root has a valid left child
         while (leftChildOf(root) <= end) {
+            // child is the left node
             int child = leftChildOf(root);
-            // take the smallest of the left or right child
+            // if right child is valid and smaller, set child to right child
             if (child + 1 <= end && data[child] > data[child + 1]) {
-                // then point to the right child instead
                 child = child + 1;
             }
 
-            // swap the child with root if child is greater
+            // if the root is larger than the child, swap the values
             if (data[root] > data[child]) {
-                // out of min-heap order
                 int temp = data[root];
                 data[root] = data[child];
                 data[child] = temp;
@@ -97,21 +102,25 @@ public class MinHeap {
             } else {
                 return;
             }
-        } // End while
+        }
     }
-
+    
+    // get the parent index of a node
     private static int parentOf(int i) {
         return i / 2;
     }
 
+    // get the right child of a node
     private static int rightChildOf(int i) {
         return 2 * i + 1;
     }
 
+    // get the left child of a node
     private static int leftChildOf(int i) {
         return 2 * i;
     }
 
+    // print just the data in the heap
     public void printHeap() {
         for (int i = 1; i <= heap[0]; i++) {
             System.out.print(heap[i] + " ");
@@ -119,6 +128,7 @@ public class MinHeap {
         System.out.println();
     }
     
+    // print the entire heap with empty space
     public void printFullHeap() {
         for (int i = 1; i <= heap.length - 1; i++) {
             System.out.print(heap[i] + " ");
